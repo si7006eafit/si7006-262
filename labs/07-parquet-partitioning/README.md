@@ -44,6 +44,10 @@ Expected: after about 20 seconds, the generator prints `Wrote 10000000 flights t
 
 ### Step 2: Open the notebook and start Spark
 
+In a browser, Open new tab or windows: http://localhost:8888, user and password in docker-compose.yml.
+
+Or
+
 In Visual Studio Code, open `labs/07-parquet-partitioning/spark_parquet.ipynb`. If it asks for a kernel, choose **Python Environments** and then `/usr/local/bin/python`. Run the cells one at a time, from the top.
 
 Run the first code cell, which starts Spark on all the cores of the container.

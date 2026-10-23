@@ -60,6 +60,10 @@ The generator takes `--flights` to change the number of flights, for example `--
 
 ### Step 2: Open the notebook and start Spark
 
+In a browser, Open new tab or windows: http://localhost:8888, user and password in docker-compose.yml.
+
+Or
+
 In Visual Studio Code, open `labs/06-spark-local/spark_local.ipynb`. If it asks for a kernel, choose **Python Environments** and then `/usr/local/bin/python`, the Python 3.13 of the container. Run the cells one at a time, from the top.
 
 Run the first code cell, which starts Spark on all the cores of the container.

@@ -22,17 +22,24 @@ services:
       - PGUSER=postgres
       - PGPASSWORD=example
       - PGDATABASE=shop
-    # Spark web UI of the labs that run Spark in this container
+      # Password of the local JupyterHub (8 characters or more), user big-data-labs
+      - JUPYTERHUB_PASSWORD=bigdatalabs
     ports:
-      - '127.0.0.1:4040:4040'
+      # JupyterHub: http://localhost:8888, with JupyterLab on the labs folder
+      - '127.0.0.1:8888:8888'
+      # Spark web UI of the labs that run Spark in this container. Each open Spark session takes
+      # the next free port: lab 6 on 4040, and lab 7 on 4041 if the lab 6 notebook is still open
+      - '127.0.0.1:4040-4042:4040-4042'
     working_dir: /app
     restart: unless-stopped
     depends_on:
       - postgres
+    # JupyterHub runs in the background as the container user; sleep keeps the container up for
+    # Visual Studio Code even if the hub stops. Its log is in `docker logs BigDataLabs`
     command:
       - /bin/sh
       - -c
-      - sleep infinity
+      - jupyterhub -f /etc/jupyterhub/jupyterhub_config.py & exec sleep infinity
 
   postgres:
     container_name: 'BigDataLabsPostgres'

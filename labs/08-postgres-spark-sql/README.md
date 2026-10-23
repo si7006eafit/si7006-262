@@ -46,6 +46,10 @@ Expected: one row that starts with `PostgreSQL 18`.
 
 ### Step 2: Open the notebook and connect to both engines
 
+In a browser, Open new tab or windows: http://localhost:8888, user and password in docker-compose.yml.
+
+Or
+
 In Visual Studio Code, open `labs/08-postgres-spark-sql/postgres_spark_sql.ipynb`. If it asks for a kernel, choose **Python Environments** and then `/usr/local/bin/python`. Run the cells one at a time, from the top.
 
 Run the first code cell. It connects to PostgreSQL with the variables `PGHOST`, `PGUSER`, `PGPASSWORD` and `PGDATABASE` of the container, and starts Spark on all the cores.
