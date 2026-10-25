@@ -1,0 +1,52 @@
+Resources:
+  AirlineDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: ${self:custom.catalog.databaseName}
+        Description: Tables of the airline, created by the crawlers of lab 10
+
+  CsvWithHeaderClassifier:
+    Type: AWS::Glue::Classifier
+    Properties:
+      CsvClassifier:
+        Name: ${self:custom.catalog.classifierName}
+        Delimiter: ','
+        QuoteSymbol: '"'
+        ContainsHeader: PRESENT
+
+  TablesCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: ${self:custom.catalog.tablesCrawlerName}
+      Description: Creates the tables flights, airports, airlines and aircraft, one per folder
+      Role: !GetAtt CrawlerRole.Arn
+      DatabaseName: !Ref AirlineDatabase
+      Classifiers:
+        - !Ref CsvWithHeaderClassifier
+      Targets:
+        S3Targets:
+          - Path: s3://${self:custom.catalog.bucketName}/raw/flights/
+          - Path: s3://${self:custom.catalog.bucketName}/raw/airports/
+          - Path: s3://${self:custom.catalog.bucketName}/raw/airlines/
+          - Path: s3://${self:custom.catalog.bucketName}/raw/aircraft/
+      SchemaChangePolicy:
+        UpdateBehavior: UPDATE_IN_DATABASE
+        DeleteBehavior: DEPRECATE_IN_DATABASE
+
+  PartitionsCrawler:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: ${self:custom.catalog.partitionsCrawlerName}
+      Description: Creates the table flights_by_month, with one partition per folder month=
+      Role: !GetAtt CrawlerRole.Arn
+      DatabaseName: !Ref AirlineDatabase
+      Classifiers:
+        - !Ref CsvWithHeaderClassifier
+      Targets:
+        S3Targets:
+          - Path: s3://${self:custom.catalog.bucketName}/raw/flights_by_month/
+      SchemaChangePolicy:
+        UpdateBehavior: UPDATE_IN_DATABASE
+        DeleteBehavior: DEPRECATE_IN_DATABASE

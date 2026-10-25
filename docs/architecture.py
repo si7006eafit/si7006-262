@@ -1,5 +1,5 @@
 """Generates the diagram of each lab: the architecture of the AWS labs, the
-local setup of lab 6 and the data model of labs 1A and 1B.
+local setup of labs 6 and 6b and the data model of labs 1A and 1B.
 
 Each diagram comes in two sizes: the full one, with details and labels on the
 arrows, for the lab README and the slides, and a small one (`*_small.png`),
@@ -14,7 +14,7 @@ from diagrams.aws.analytics import (Athena, Glue, GlueCrawlers, GlueDataCatalog,
 from diagrams.aws.integration import EventbridgeScheduler, StepFunctions
 from diagrams.aws.storage import S3
 from diagrams.generic.storage import Storage
-from diagrams.onprem.analytics import Spark
+from diagrams.onprem.analytics import Databricks, Spark
 from diagrams.onprem.database import PostgreSQL
 from diagrams.onprem.client import Client
 from diagrams.programming.language import Python
@@ -238,6 +238,34 @@ def lab06(kit):
         notebook >> kit.branch(label=kit.note("runs the code")) >> spark
 
 
+def lab06b(kit):
+    with kit.diagram("Lab 6b - The same Spark code on three platforms",
+                     "Lab 6b", "lab06b_spark_platforms"):
+        files = Storage(kit.pick(
+            "Your computer\nbooks, sample_data.csv\nand 1 million flights",
+            "Data files"),
+                        height=kit.height,
+                        labelloc="t")
+        local = Spark(kit.pick(
+            "Development container\nspark-submit and\nnotebooks",
+            "Dev container"),
+                      height=kit.height)
+        colab = Python(kit.pick("Google Colab\nthe same notebooks", "Colab"),
+                       height=kit.height)
+        databricks = Databricks(kit.pick(
+            "Databricks Free Edition\nspark_databricks.ipynb", "Databricks"),
+                                height=kit.height)
+
+        files >> kit.edge(label=kit.note("reads"), tailport="e",
+                          headport="w") >> local
+        files >> kit.edge(label=kit.note("copied to\nGoogle Drive"),
+                          tailport="e",
+                          headport="w") >> colab
+        files >> kit.edge(label=kit.note("uploaded to\na volume"),
+                          tailport="e",
+                          headport="w") >> databricks
+
+
 def lab07(kit):
     with kit.diagram("Lab 7 - Parquet and partitioning with Spark", "Lab 7",
                      "lab07_parquet_partitioning"):
@@ -309,6 +337,36 @@ def lab09(kit):
             label=kit.note("reads input/,\nwrites output/")) >> bucket
         computer >> kit.branch(label=kit.note("aws s3 cp"),
                                tailport="e") >> bucket
+
+
+def lab09b(kit):
+    with kit.diagram(
+            "Lab 09b - A catalog of the airline with S3, Glue and Athena",
+            "Lab 09b", "lab09b_flights_catalog"):
+        athena = Athena(kit.pick("Athena\nworkgroup big-data-labs-airline",
+                                 "Athena"),
+                        height=kit.height,
+                        labelloc="t")
+        files = Client(kit.pick(
+            "Your computer\nflights, airports,\nairlines, aircraft",
+            "Your computer"),
+                       height=kit.height)
+        bucket = S3(kit.pick("S3\nraw/, one folder\nper table", "S3"),
+                    height=kit.height)
+        crawler = GlueCrawlers(kit.pick("Glue crawlers\nCSV with header",
+                                        "Glue crawlers"),
+                               height=kit.height)
+        catalog = GlueDataCatalog(kit.pick("Glue catalog\nairline_lake",
+                                           "Glue catalog"),
+                                  height=kit.height)
+
+        files >> kit.flow(label=kit.note("aws s3 sync")) >> bucket
+        bucket >> kit.flow(label=kit.note("reads each\nfolder")) >> crawler
+        crawler >> kit.flow(label=kit.note("writes the\ntables")) >> catalog
+        athena >> kit.support(
+            label=kit.note("table  \ndefinition  ")) >> catalog
+        athena >> kit.loose(label=kit.note("reads  \nthe files  "),
+                            style="dashed") >> bucket
 
 
 BLUE = "#336791"
@@ -526,6 +584,6 @@ def lab01b(kit):
 
 for is_small in (False, True):
     lab_kit = Kit(is_small)
-    for lab in (lab01a, lab01b, lab02, lab03, lab04, lab05, lab06, lab07, lab08,
-                lab09):
+    for lab in (lab01a, lab01b, lab02, lab03, lab04, lab05, lab06, lab06b,
+                lab07, lab08, lab09, lab09b):
         lab(lab_kit)

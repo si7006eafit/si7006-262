@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Lab 6b: the same Spark code on your computer, Google Colab and Databricks Free Edition, with a WordCount script for `spark-submit`, a WordCount notebook with RDDs, DataFrames and Spark SQL, a notebook of DataFrames, SQL and UDFs, a notebook for the serverless compute of Databricks, and its diagram in `docs/`
+- `datasets/`: books from Project Gutenberg in English and Spanish, and `sample_data.csv`
+
+### Removed
+
+- The old notebooks of lab 6b for Colab, S3 and the Databricks lakehouse, and `wc-pyspark.py`, replaced by the new files of the lab
+
+## [1.2.0] - 24/10/2026
+
+### Added
+
+- Lab 10: a catalog of the airline, with its own stack (an S3 bucket, a Glue database, a CSV classifier for files with a header, one crawler for the four tables and one for the flights partitioned by month, the IAM role of the crawlers and an Athena workgroup), three SQL files that explore the tables, join them and compare the data scanned with and without partitions, and its diagram in `docs/`
+
 ## [1.1.0] - 18/10/2026
 
 ### Added

@@ -35,11 +35,13 @@ It is built as a teaching project: every lab runs inside Docker, so nothing is i
 | 4   | Medallion layers (bronze, silver, gold) with SQL in Athena               | AWS              | Ready  |
 | 5   | Streaming click events to S3 with Firehose                               | AWS              | Ready  |
 | 6   | Apache Spark on your computer, with the flights of an airline            | Local Spark      | Ready  |
+| 6b  | The same Spark code on your computer, Google Colab and Databricks        | Local Spark      | Ready  |
 | 7   | Parquet files, partitioning and compression with Spark                   | Local Spark      | Ready  |
 | 8   | PostgreSQL and Spark SQL on the same flights                             | Local Spark      | Ready  |
 | 9   | A batch pipeline: a Spark job in AWS Glue, Step Functions and a schedule | AWS              | Ready  |
+| 10  | A catalog of the airline: S3, Glue crawlers and Athena                   | AWS              | Ready  |
 
-Labs 1, 6, 7 and 8 run only on your computer. Labs 2 to 4 work with the free plan of your AWS account. Lab 5, and the labs after it, need the paid plan, and its README explains how to upgrade. Labs 2 to 4 share one base stack (an S3 bucket with zones, a Glue database and an Athena workgroup), deployed once. Labs 5 and 9 have their own stack. Each lab has its own README with its steps and how to remove what it created. Labs 2 to 4 remove the base stack together, at the end of lab 4.
+Labs 1, 6, 7 and 8 run only on your computer. Lab 6b runs on your computer, in Google Colab and in Databricks Free Edition. Labs 2 to 4 work with the free plan of your AWS account. Lab 5, and the labs after it, need the paid plan, and its README explains how to upgrade. Labs 2 to 4 share one base stack (an S3 bucket with zones, a Glue database and an Athena workgroup), deployed once. Labs 5, 9 and 10 have their own stack. Each lab has its own README with its steps and how to remove what it created. Labs 2 to 4 remove the base stack together, at the end of lab 4.
 
 | Lab 1A: normalization                                                                                                          | Lab 1B: star schema                                                                                                   |
 | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
@@ -53,18 +55,23 @@ Labs 1, 6, 7 and 8 run only on your computer. Labs 2 to 4 work with the free pla
 | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | <a href="labs/04-medallion/"><img src="docs/lab04_medallion_small.png" alt="Lab 4 architecture" width="400"></a> | <a href="labs/05-firehose/"><img src="docs/lab05_firehose_small.png" alt="Lab 5 architecture" width="400"></a> |
 
-| Lab 6: Spark on your computer                                                                                 | Lab 7: Parquet and partitioning                                                                                                 |
-| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <a href="labs/06-spark-local/"><img src="docs/lab06_spark_local_small.png" alt="Lab 6 setup" width="400"></a> | <a href="labs/07-parquet-partitioning/"><img src="docs/lab07_parquet_partitioning_small.png" alt="Lab 7 setup" width="400"></a> |
+| Lab 6: Spark on your computer                                                                                 | Lab 6b: Spark on three platforms                                                                               |
+| ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| <a href="labs/06-spark-local/"><img src="docs/lab06_spark_local_small.png" alt="Lab 6 setup" width="400"></a> | <a href="labs/06b-spark/"><img src="docs/lab06b_spark_platforms_small.png" alt="Lab 6b setup" width="400"></a> |
 
-| Lab 8: PostgreSQL and Spark SQL                                                                                             | Lab 9: batch pipeline with Glue                                                                                    |
-| --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| <a href="labs/08-postgres-spark-sql/"><img src="docs/lab08_postgres_spark_sql_small.png" alt="Lab 8 setup" width="400"></a> | <a href="labs/09-glue-batch/"><img src="docs/lab09_glue_batch_small.png" alt="Lab 9 architecture" width="400"></a> |
+| Lab 7: Parquet and partitioning                                                                                                 | Lab 8: PostgreSQL and Spark SQL                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| <a href="labs/07-parquet-partitioning/"><img src="docs/lab07_parquet_partitioning_small.png" alt="Lab 7 setup" width="400"></a> | <a href="labs/08-postgres-spark-sql/"><img src="docs/lab08_postgres_spark_sql_small.png" alt="Lab 8 setup" width="400"></a> |
+
+| Lab 9: batch pipeline with Glue                                                                                    | Lab 10: catalog with Glue and Athena                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| <a href="labs/09-glue-batch/"><img src="docs/lab09_glue_batch_small.png" alt="Lab 9 architecture" width="400"></a> | <a href="labs/10-s3-glue-athena/"><img src="docs/lab09b_flights_catalog_small.png" alt="Lab 10 architecture" width="400"></a> |
 
 ### Repository structure
 
 - **`.docker/`**: the multi-stage `Dockerfile`, `docker-compose.yml` (the development container, PostgreSQL and pgAdmin) and the scripts the container runs when it is created.
 - **`.envs/`**: your credentials, git-ignored. The `*.example` files show which variables you need.
+- **`datasets/`**: the books from Project Gutenberg and the CSV file of lab 6b.
 - **`docs/`**: the diagram of each lab (the data model of labs 1A and 1B, the architecture of the AWS labs), in a full and a small size, generated from `docs/architecture.py` with `python3 docs/architecture.py`.
 - **`labs/`**: one folder per lab, `labs/<NN>-<name>/`. Code shared by several labs, such as the data generator, lives in `labs/shared/`.
 

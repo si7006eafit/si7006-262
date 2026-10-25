@@ -1,0 +1,14 @@
+Resources:
+  AthenaWorkGroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: ${self:custom.catalog.workgroupName}
+      Description: Queries of lab 10 on the tables of the airline
+      State: ENABLED
+      RecursiveDeleteOption: true
+      WorkGroupConfiguration:
+        EnforceWorkGroupConfiguration: true
+        PublishCloudWatchMetricsEnabled: false
+        BytesScannedCutoffPerQuery: 1000000000
+        ResultConfiguration:
+          OutputLocation: s3://${self:custom.catalog.bucketName}/athena-results/
