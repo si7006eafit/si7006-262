@@ -1,0 +1,24 @@
+Parameters:
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+Resources:
+  LogsServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t3.micro
+      IamInstanceProfile: !Ref ServerInstanceProfile
+      MetadataOptions:
+        HttpTokens: required
+      Tags:
+        - Key: Name
+          Value: ${self:custom.retail.serverName}
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          dnf install -y aws-kinesis-agent
+          mkdir -p /var/log/retail /opt/lab12b
+          chmod 755 /var/log/retail
+          systemctl enable aws-kinesis-agent

@@ -1,0 +1,14 @@
+Resources:
+  RetailDeliveryStream:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamName: ${self:custom.retail.deliveryStreamName}
+      DeliveryStreamType: DirectPut
+      ExtendedS3DestinationConfiguration:
+        BucketARN: !GetAtt RetailBucket.Arn
+        RoleARN: !GetAtt FirehoseRole.Arn
+        Prefix: orders/
+        BufferingHints:
+          SizeInMBs: 5
+          IntervalInSeconds: 60
+        CompressionFormat: UNCOMPRESSED

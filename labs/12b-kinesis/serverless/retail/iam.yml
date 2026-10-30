@@ -1,0 +1,114 @@
+Resources:
+  FirehoseRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:custom.servicePrefix}-firehose-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                sts:ExternalId: !Ref AWS::AccountId
+      Policies:
+        - PolicyName: DeliverToTheRetailBucket
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:AbortMultipartUpload
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:ListBucketMultipartUploads
+                  - s3:PutObject
+                Resource:
+                  - !GetAtt RetailBucket.Arn
+                  - !Sub ${RetailBucket.Arn}/*
+
+  ConsumerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:custom.servicePrefix}-consumer-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: ReadTheStreamAndWriteTheTable
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - kinesis:DescribeStream
+                  - kinesis:DescribeStreamSummary
+                  - kinesis:GetRecords
+                  - kinesis:GetShardIterator
+                  - kinesis:ListShards
+                  - kinesis:ListStreams
+                Resource: !GetAtt RetailOrdersStream.Arn
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                Resource: !GetAtt RetailOrdersTable.Arn
+
+  ServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:custom.servicePrefix}-server-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: SendTheLogsAndReadTheLabFiles
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - firehose:DescribeDeliveryStream
+                  - firehose:PutRecord
+                  - firehose:PutRecordBatch
+                Resource: !GetAtt RetailDeliveryStream.Arn
+              - Effect: Allow
+                Action:
+                  - kinesis:DescribeStream
+                  - kinesis:DescribeStreamSummary
+                  - kinesis:PutRecord
+                  - kinesis:PutRecords
+                Resource: !GetAtt RetailOrdersStream.Arn
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !GetAtt RetailBucket.Arn
+                Condition:
+                  StringLike:
+                    s3:prefix:
+                      - lab/*
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub ${RetailBucket.Arn}/lab/*
+
+  ServerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: ${self:custom.servicePrefix}-server-profile
+      Roles:
+        - !Ref ServerRole

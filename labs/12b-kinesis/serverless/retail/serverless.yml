@@ -1,0 +1,60 @@
+service: lab12b-retail
+frameworkVersion: '^4.43.0'
+configValidationMode: error
+
+provider:
+  name: aws
+  stage: dev
+  region: us-east-1
+  runtime: python3.13
+  stackName: ${env:DEPLOY_APP}-${self:service}
+  deploymentBucket:
+    name: ${self:provider.region}.cfn.${self:service}.${env:DEPLOY_APP}.${aws:accountId}.deploys
+
+plugins:
+  - serverless-deployment-bucket
+  - '@serverless/safeguards-plugin'
+
+package:
+  patterns:
+    - '!**'
+    - retail_consumer.py
+
+functions: ${file(functions.yml)}
+
+resources:
+  - ${file(s3.yml)}
+  - ${file(firehose.yml)}
+  - ${file(kinesis.yml)}
+  - ${file(dynamodb.yml)}
+  - ${file(glue.yml)}
+  - ${file(athena.yml)}
+  - ${file(iam.yml)}
+  - ${file(ec2.yml)}
+  - ${file(parameters.yml)}
+
+custom:
+  safeguards:
+    - safeguard: framework-version
+      enforcementLevel: warning
+      config: ${self:frameworkVersion}
+    - safeguard: allowed-regions
+      enforcementLevel: error
+      config:
+        - ${self:provider.region}
+    - safeguard: no-wild-iam-role-statements
+      enforcementLevel: warning
+    - safeguard: allowed-stages
+      enforcementLevel: error
+      config:
+        - dev
+  servicePrefix: ${env:DEPLOY_APP}-${self:service}
+  retail:
+    bucketName: ${env:DEPLOY_APP}-retail-${aws:accountId}
+    deliveryStreamName: ${env:DEPLOY_APP}-retail-logs
+    streamName: ${env:DEPLOY_APP}-retail-orders
+    tableName: ${env:DEPLOY_APP}-retail-orders
+    functionName: ${env:DEPLOY_APP}-retail-orders-consumer
+    databaseName: big_data_labs_retail
+    workgroupName: ${env:DEPLOY_APP}-retail
+    serverName: ${env:DEPLOY_APP}-retail-logs-server

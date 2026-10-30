@@ -1,0 +1,14 @@
+consumer:
+  handler: retail_consumer.handler
+  role: !GetAtt ConsumerRole.Arn
+  name: ${self:custom.retail.functionName}
+  timeout: 30
+  environment:
+    TABLE_NAME: ${self:custom.retail.tableName}
+  events:
+    - stream:
+        type: kinesis
+        arn: !GetAtt RetailOrdersStream.Arn
+        batchSize: 100
+        startingPosition: TRIM_HORIZON
+        maximumRetryAttempts: 3

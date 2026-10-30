@@ -1,0 +1,14 @@
+Resources:
+  RetailWorkGroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: ${self:custom.retail.workgroupName}
+      Description: Queries of lab 12b
+      State: ENABLED
+      RecursiveDeleteOption: true
+      WorkGroupConfiguration:
+        EnforceWorkGroupConfiguration: true
+        PublishCloudWatchMetricsEnabled: false
+        BytesScannedCutoffPerQuery: 1000000000
+        ResultConfiguration:
+          OutputLocation: s3://${self:custom.retail.bucketName}/athena-results/

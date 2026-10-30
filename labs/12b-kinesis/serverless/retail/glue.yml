@@ -1,0 +1,8 @@
+Resources:
+  RetailDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: ${self:custom.retail.databaseName}
+        Description: Tables of lab 12b

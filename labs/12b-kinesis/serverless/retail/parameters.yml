@@ -1,0 +1,16 @@
+Resources:
+  RetailBucketName:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${AWS::StackName}/RetailBucketName
+      Tier: Standard
+      Type: String
+      Value: !Ref RetailBucket
+
+  LogsServerId:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${AWS::StackName}/LogsServerId
+      Tier: Standard
+      Type: String
+      Value: !Ref LogsServer

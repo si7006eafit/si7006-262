@@ -1,0 +1,32 @@
+{
+  "cloudwatch.emitMetrics": false,
+  "firehose.endpoint": "firehose.us-east-1.amazonaws.com",
+  "kinesis.endpoint": "kinesis.us-east-1.amazonaws.com",
+  "flows": [
+    {
+      "filePattern": "/var/log/retail/*.log",
+      "deliveryStream": "big-data-labs-retail-logs"
+    },
+    {
+      "filePattern": "/var/log/retail/*.log",
+      "kinesisStream": "big-data-labs-retail-orders",
+      "partitionKeyOption": "RANDOM",
+      "dataProcessingOptions": [
+        {
+          "optionName": "CSVTOJSON",
+          "delimiter": "\t",
+          "customFieldNames": [
+            "InvoiceNo",
+            "StockCode",
+            "Description",
+            "Quantity",
+            "InvoiceDate",
+            "UnitPrice",
+            "CustomerID",
+            "Country"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -43,6 +43,8 @@ It is built as a teaching project: every lab runs inside Docker, so nothing is i
 | 10  | Apache Kafka on your computer: partitions, offsets and consumer groups      | Local Kafka      |
 | 11  | From Kafka to PostgreSQL: a live pipeline, repeated events and reprocessing | Local Kafka      |
 | 12  | Order events in real time: Kinesis Data Streams, Lambda and DynamoDB        | AWS              |
+| 12c | Order logs with the Kinesis Agent: Firehose, Athena, a data stream and DynamoDB (es)| AWS Academy      |
+| 12b | Order logs with the Kinesis Agent: Firehose, Athena, a data stream and DynamoDB | AWS Academy              |
 | 13  | Windows of one minute with Apache Flink on order events                     | AWS              |
 
 
