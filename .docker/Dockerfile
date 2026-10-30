@@ -96,5 +96,6 @@ RUN pip3 install --no-cache-dir 'jupyterhub==6.1.1' 'jupyterlab==4.6.4' \
     && chown -R $USER:$USER /usr/local/lib/node_modules /usr/local/bin \
     && jupyterhub --version && configurable-http-proxy --version
 COPY jupyterhub_config.py /etc/jupyterhub/jupyterhub_config.py
+RUN pip3 install confluent-kafka==2.16.0
 EXPOSE 8888
 USER $USER

@@ -61,5 +61,5 @@
       }
     }
   },
-  "postCreateCommand": "sed -i 's/\\r$//' .docker/*.sh && sudo chmod +x .docker/*.sh && .docker/entrypoint.sh"
+  "postCreateCommand": "sudo sed -i 's/\\r$//' .docker/*.sh && sudo chmod +x .docker/*.sh && .docker/entrypoint.sh"
 }

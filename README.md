@@ -39,9 +39,14 @@ It is built as a teaching project: every lab runs inside Docker, so nothing is i
 | 7   | Parquet files, partitioning and compression with Spark                   | Local Spark      | Ready  |
 | 8   | PostgreSQL and Spark SQL on the same flights                             | Local Spark      | Ready  |
 | 9   | A batch pipeline: a Spark job in AWS Glue, Step Functions and a schedule | AWS              | Ready  |
-| 10  | A catalog of the airline: S3, Glue crawlers and Athena                   | AWS              | Ready  |
+| 9b  | A catalog of the airline: S3, Glue crawlers and Athena                   | AWS              | Ready  |
+| 10  | Apache Kafka on your computer: partitions, offsets and consumer groups      | Local Kafka      |
+| 11  | From Kafka to PostgreSQL: a live pipeline, repeated events and reprocessing | Local Kafka      |
+| 12  | Order events in real time: Kinesis Data Streams, Lambda and DynamoDB        | AWS              |
+| 13  | Windows of one minute with Apache Flink on order events                     | AWS              |
 
-Labs 1, 6, 7 and 8 run only on your computer. Lab 6b runs on your computer, in Google Colab and in Databricks Free Edition. Labs 2 to 4 work with the free plan of your AWS account. Lab 5, and the labs after it, need the paid plan, and its README explains how to upgrade. Labs 2 to 4 share one base stack (an S3 bucket with zones, a Glue database and an Athena workgroup), deployed once. Labs 5, 9 and 10 have their own stack. Each lab has its own README with its steps and how to remove what it created. Labs 2 to 4 remove the base stack together, at the end of lab 4.
+
+Labs 1, 6, 7, 8, 10 and 11run only on your computer. Lab 6b runs on your computer, in Google Colab and in Databricks Free Edition. Labs 2 to 4 work with the free plan of your AWS account. Lab 5, and the labs after it, need the paid plan, and its README explains how to upgrade. Labs 2 to 4 share one base stack (an S3 bucket with zones, a Glue database and an Athena workgroup), deployed once. Labs 5, 9, 12 and 13 have their own stack. Each lab has its own README with its steps and how to remove what it created. Labs 2 to 4 remove the base stack together, at the end of lab 4.
 
 | Lab 1A: normalization                                                                                                          | Lab 1B: star schema                                                                                                   |
 | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
@@ -66,6 +71,14 @@ Labs 1, 6, 7 and 8 run only on your computer. Lab 6b runs on your computer, in G
 | Lab 9: batch pipeline with Glue                                                                                    | Lab 10: catalog with Glue and Athena                                                                                         |
 | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
 | <a href="labs/09-glue-batch/"><img src="docs/lab09_glue_batch_small.png" alt="Lab 9 architecture" width="400"></a> | <a href="labs/10-s3-glue-athena/"><img src="docs/lab09b_flights_catalog_small.png" alt="Lab 10 architecture" width="400"></a> |
+
+| Lab 10: Kafka on your computer                                                                     | Lab 11: from Kafka to PostgreSQL                                                                                     |
+| -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| <a href="labs/10-kafka/"><img src="docs/lab10_kafka_small.png" alt="Lab 10 setup" width="400"></a> | <a href="labs/11-kafka-postgres/"><img src="docs/lab11_kafka_postgres_small.png" alt="Lab 11 setup" width="400"></a> |
+
+| Lab 12: orders in real time with Kinesis                                                                      | Lab 13: windows with Flink                                                                                |
+| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <a href="labs/12-kinesis/"><img src="docs/lab12_kinesis_small.png" alt="Lab 12 architecture" width="400"></a> | <a href="labs/13-flink/"><img src="docs/lab13_flink_small.png" alt="Lab 13 architecture" width="400"></a> |
 
 ### Repository structure
 
