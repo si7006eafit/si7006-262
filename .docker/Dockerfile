@@ -80,6 +80,7 @@ RUN apt-get update \
     && ln -s "$(dirname "$(dirname "$(readlink -f "$(which java)")")")" /usr/lib/jvm/java \
     && rm -rf /var/lib/apt/lists/*
 ENV JAVA_HOME=/usr/lib/jvm/java
+RUN apt-get install -y --no-install-recommends maven
 # Data generator and lab scripts
 RUN pip3 install --no-cache-dir boto3 Faker pytest pytest-cov diagrams
 # PySpark, pandas, the Jupyter kernel, the PostgreSQL driver and the AWS Glue library for the Spark labs.
